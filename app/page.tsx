@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import ImageUpload from "./image-upload";
 import { redirect } from "next/navigation";
 import SignOutButton from "./sign-out-button";
 import CaptionCard from "./caption-card";
@@ -38,6 +39,7 @@ export default async function Home() {
                     <SignOutButton />
                 </div>
             </div>
+            <ImageUpload />
             {captions && captions.length > 0 ? (
                 captions.map((caption) => (
                     <CaptionCard
