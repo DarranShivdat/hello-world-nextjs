@@ -12,7 +12,6 @@ export async function POST(request: Request) {
     }
 
     const token = session.access_token;
-    console.log("TOKEN:", token);
     const formData = await request.formData();
     const file = formData.get("file") as File;
 

@@ -6,7 +6,6 @@ export default function ImageUpload() {
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [captions, setCaptions] = useState<any[]>([]);
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -18,7 +17,6 @@ export default function ImageUpload() {
             setPreview(URL.createObjectURL(selected));
             setCaptions([]);
             setError(null);
-            setImageUrl(null);
         }
     };
 
@@ -43,7 +41,6 @@ export default function ImageUpload() {
                 setError(data.error || "Something went wrong");
             } else {
                 setCaptions(data.captions || []);
-                setImageUrl(data.cdnUrl || null);
             }
         } catch (err: any) {
             setError(err.message);
@@ -53,18 +50,7 @@ export default function ImageUpload() {
     };
 
     return (
-        <div
-            style={{
-                border: "1px solid #333",
-                borderRadius: "8px",
-                padding: "1.5rem",
-                marginBottom: "2rem",
-            }}
-        >
-            <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>
-                Upload Image & Generate Captions
-            </h2>
-
+        <>
             <input
                 ref={fileInputRef}
                 type="file"
@@ -74,72 +60,60 @@ export default function ImageUpload() {
             />
 
             <button
+                className={`file-btn ${file ? "has-file" : ""}`}
                 onClick={() => fileInputRef.current?.click()}
-                style={{
-                    padding: "10px 20px",
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    backgroundColor: "#333",
-                    color: "white",
-                    border: "1px solid #555",
-                    borderRadius: "6px",
-                    marginBottom: "1rem",
-                }}
             >
-                {file ? `📎 ${file.name}` : "📁 Choose an image..."}
+                {file ? (
+                    <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
+                        {file.name}
+                    </>
+                ) : (
+                    <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                        Choose an image...
+                    </>
+                )}
             </button>
 
             {preview && (
-                <div style={{ marginBottom: "1rem" }}>
-                    <img
-                        src={preview}
-                        alt="Preview"
-                        style={{ maxWidth: "300px", borderRadius: "8px" }}
-                    />
+                <div className="preview-container">
+                    <img src={preview} alt="Preview" className="preview-img" />
                 </div>
             )}
 
             <div>
                 <button
+                    className="generate-btn"
                     onClick={handleSubmit}
                     disabled={!file || loading}
-                    style={{
-                        padding: "10px 20px",
-                        fontSize: "1rem",
-                        cursor: !file || loading ? "default" : "pointer",
-                        backgroundColor: "#4285F4",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "6px",
-                        opacity: !file || loading ? 0.6 : 1,
-                    }}
                 >
-                    {loading ? "⏳ Generating captions..." : "🚀 Generate Captions"}
+                    {loading ? (
+                        <>
+                            <span className="spinner" />
+                            Generating...
+                        </>
+                    ) : (
+                        <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+                            Generate Captions
+                        </>
+                    )}
                 </button>
             </div>
 
-            {error && (
-                <p style={{ color: "#ef4444", marginTop: "1rem" }}>{error}</p>
-            )}
+            {error && <div className="error-msg">{error}</div>}
 
             {captions.length > 0 && (
-                <div style={{ marginTop: "1.5rem" }}>
-                    <h3 style={{ marginBottom: "0.5rem" }}>Generated Captions:</h3>
+                <div className="generated-list">
+                    <div className="generated-label">Generated Captions</div>
                     {captions.map((caption: any, i: number) => (
-                        <div
-                            key={caption.id || i}
-                            style={{
-                                padding: "0.75rem",
-                                marginBottom: "0.5rem",
-                                backgroundColor: "#222",
-                                borderRadius: "6px",
-                            }}
-                        >
+                        <div key={caption.id || i} className="generated-item">
                             {caption.content || JSON.stringify(caption)}
                         </div>
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 }

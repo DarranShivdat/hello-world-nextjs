@@ -44,51 +44,28 @@ export default function CaptionCard({
     };
 
     return (
-        <div
-            style={{
-                border: "1px solid #333",
-                borderRadius: "8px",
-                padding: "1rem",
-                marginBottom: "1rem",
-            }}
-        >
-            <p style={{ fontSize: "1.1rem", marginBottom: "0.5rem" }}>
-                {caption.content}
-            </p>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div className="caption-card">
+            <p className="caption-text">{caption.content}</p>
+            <div className="caption-actions">
                 <button
+                    className={`vote-btn ${currentVote === 1 ? "upvoted" : ""}`}
                     onClick={() => handleVote(1)}
                     disabled={loading || currentVote !== null}
-                    style={{
-                        padding: "6px 16px",
-                        cursor: currentVote !== null ? "default" : "pointer",
-                        backgroundColor: currentVote === 1 ? "#22c55e" : "#444",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        opacity: currentVote !== null && currentVote !== 1 ? 0.5 : 1,
-                    }}
                 >
-                    👍 Upvote
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg>
+                    Upvote
                 </button>
                 <button
+                    className={`vote-btn ${currentVote === -1 ? "downvoted" : ""}`}
                     onClick={() => handleVote(-1)}
                     disabled={loading || currentVote !== null}
-                    style={{
-                        padding: "6px 16px",
-                        cursor: currentVote !== null ? "default" : "pointer",
-                        backgroundColor: currentVote === -1 ? "#ef4444" : "#444",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        opacity: currentVote !== null && currentVote !== -1 ? 0.5 : 1,
-                    }}
                 >
-                    👎 Downvote
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10zM17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" /></svg>
+                    Downvote
                 </button>
                 {currentVote !== null && (
-                    <span style={{ marginLeft: "0.5rem", color: "#888" }}>
-            You voted: {currentVote === 1 ? "👍" : "👎"}
+                    <span className="vote-status">
+            {currentVote === 1 ? "✓ Upvoted" : "✓ Downvoted"}
           </span>
                 )}
             </div>
